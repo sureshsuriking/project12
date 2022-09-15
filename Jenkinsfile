@@ -3,7 +3,7 @@ pipeline {
      environment {
         def name = "my name"
         def pwdv = "suresh"
-        def branch="master"
+        def branch="main"
     }
     parameters {
         string(name: 'STRING_VARIABLE', defaultValue: 'TestTrainer', description: 'Who should I say hello to?')
