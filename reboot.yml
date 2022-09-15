@@ -1,0 +1,7 @@
+---
+- name: installations
+  hosts: manager, worker, database
+  user: root
+  become_user: yes
+  roles:
+      - reboot

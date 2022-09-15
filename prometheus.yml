@@ -1,0 +1,19 @@
+---
+- name: Deploy Prometheus
+  hosts: manager, worker, database
+  user: ubuntu
+  become_user: yes
+  roles:
+      - prometheus
+
+- name: Start the server
+  hosts: manager
+  remote_user: ubuntu
+  roles:
+    - prometheus-manager
+
+- name: Start the server
+  hosts: worker, database
+  remote_user: ubuntu
+  roles:
+    - prometheus-worker-db

@@ -1,0 +1,28 @@
+- hosts: manager
+  remote_user: root
+  become: yes
+  gather_facts: true
+  become_method: sudo
+  tasks:
+  - name: swarm leave
+    command: docker swarm leave -f
+    ignore_errors: yes    
+  - name: "create primary swarm manager"
+    shell: docker swarm init --advertise-addr {{ hostvars[groups['manager'][0]]['ansible_default_ipv4']['address'] }}
+  - name: "get docker swarm worker token"
+    shell: docker swarm join-token -q worker
+    register: worker_token
+
+- hosts: worker
+  remote_user: root
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: swarm leave
+    command: docker swarm leave -f
+    ignore_errors: yes    
+  - name: "join as a worker"
+    shell: "docker swarm join --token {{ hostvars[groups['manager'][0]]['worker_token']['stdout'] }} {{ hostvars[groups['manager'][0]]['ansible_default_ipv4']['address'] }}:2377"
+    retries: 3
+    delay: 20

@@ -1,0 +1,13 @@
+---
+- name: installations
+  hosts: database
+  user: ubuntu
+  become_user: yes
+  roles:
+      - postgres-install
+- name: installations
+  hosts: manager, worker, database
+  user: ubuntu
+  become_user: yes
+  roles:
+      - docker-install

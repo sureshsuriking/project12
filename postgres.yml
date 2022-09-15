@@ -1,0 +1,26 @@
+---
+- hosts: worker
+  user: ubuntu
+  tasks: []
+- name: change pg_hba.conf
+  hosts: database
+  user: ubuntu
+  become: yes
+  vars:
+    HOST_COUNT: "{{ groups['worker'] | length }}"
+    gp: "{{ hostvars[groups['worker'][0]]['ansible_default_ipv4']['address'] }}"
+  tasks:
+   - name: edit pg_hba
+     lineinfile:
+       path: /etc/postgresql/9.6/main/pg_hba.conf
+       insertafter: '^local   all'
+       regexp: '^local   all'
+       line: "host    all             all             {{ gp }}/24            md5"
+   - name: edit postgres.conf
+     lineinfile:
+       path: /etc/postgresql/9.6/main/postgresql.conf
+       regexp: '^#listen_addresses'
+       insertafter: '^#listen_addresses'
+       line: "listen_addresses='*'"
+   - name: restart postgresql
+     command: systemctl restart postgresql

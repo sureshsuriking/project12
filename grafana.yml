@@ -1,0 +1,6 @@
+---
+- name: Start the server
+  hosts: manager
+  remote_user: ubuntu
+  roles:
+    - grafana

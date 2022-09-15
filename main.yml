@@ -1,0 +1,6 @@
+---
+- import_playbook: install.yml
+- import_playbook: reboot.yml
+- import_playbook: docker-swarm.yml
+- import_playbook: prometheus.yml
+- import_playbook: grafana.yml
