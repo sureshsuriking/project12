@@ -21,7 +21,7 @@ pipeline {
         stage('Hello') {
             steps {
                 echo 'Hello World'
-                 git branch: "${branch}", url: 'https://github.com/gurudath/java-hello-world-with-maven.git'
+                 git branch: "${branch}", url: 'https://github.com/sureshsuriking/project12.git'
                 
             }
         }
@@ -33,6 +33,14 @@ pipeline {
                 // }
             }
         } 
+        stage('terraform'){
+	    steps{
+		  sh "terraform init"
+		  sh "terraform plan"
+		  sh "terrafomr apply --auto-approve"
+		  sh "terraform destroy"
+	          }   
+	    }
         stage('Hi') {
             steps {
                 dir('abc') {
@@ -63,15 +71,6 @@ pipeline {
             }
         }
        
-        stage('maven'){
-           steps{
-               script{
-                  sh ("mvn clean")
-                  sh ("mvn package")
-                  sh ("java -jar /var/lib/jenkins/workspace/project/target/jb-hello-world-maven-0.1.0.jar")
-               }
-           }
-        }
         stage('Loop') {
             steps {
                 echo 'Hello World'
